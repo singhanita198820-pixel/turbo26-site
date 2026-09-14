@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TurboSwap - Exchange</title>
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <style>
+        body { background: #0d0d0d; color: white; font-family: Arial; text-align: center; padding: 50px; }
+        .box { background: #1a1a1a; padding: 30px; border-radius: 15px; width: 350px; margin: auto; border: 1px solid #f39c12; }
+        input { width: 90%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #333; background: #333; color: white; font-size: 18px; }
+        button { width: 100%; padding: 15px; background: #f39c12; border: none; border-radius: 10px; font-size: 18px; font-weight: bold; cursor: pointer; color: black; }
+        button:hover { background: #e67e22; }
+        h1 { color: #f39c12; }
+    </style>
+</head>
+<body>
+
+    <h1>🔥 TurboSwap</h1>
+    <p>TURBO Token ko USDT me swap karo</p>
+
+    <div class="box">
+        <button id="connectBtn">Connect Wallet</button>
+        
+        <div id="swapBox" style="display:none; margin-top:20px;">
+            <p><b>From</b></p>
+            <input type="number" id="fromAmount" placeholder="0.0">
+            <p>TURBO</p>
+
+            <p><b>To</b></p>
+            <input type="number" id="toAmount" placeholder="0.0" readonly>
+            <p>USDT</p>
+
+            <button id="swapBtn">Swap Now</button>
+        </div>
+    </div>
+
+<script>
+    const connectBtn = document.getElementById('connectBtn');
+    const swapBox = document.getElementById('swapBox');
+
+    // 1. Wallet Connect
+    connectBtn.onclick = async () => {
+        if (typeof window.ethereum !== 'undefined') {
+            await window.ethereum.request({ method: 'eth_requestAccounts' });
+            connectBtn.innerText = "Wallet Connected ✅";
+            connectBtn.style.background = "#2ecc71";
+            swapBox.style.display = "block";
+        } else {
+            alert("Pehle MetaMask install karo! https://metamask.io");
+        }
+    }
+
+    // 2. Price Calculation - 1 TURBO = 0.01 USDT
+    document.getElementById('fromAmount').oninput = (e) => {
+        document.getElementById('toAmount').value = e.target.value * 0.01;
+    }
+
+    // 3. Swap Button - Baad me contract address yaha dalenge
+    document.getElementById('swapBtn').onclick = () => {
+        alert("Swap ke liye Smart Contract abhi banana baki hai! \nPehle contract deploy karte hain.");
+    }
+</script>
+
+</body>
+</html>
