@@ -1,66 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TurboSwap - Exchange</title>
-    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
-    <style>
-        body { background: #0d0d0d; color: white; font-family: Arial; text-align: center; padding: 50px; }
-        .box { background: #1a1a1a; padding: 30px; border-radius: 15px; width: 350px; margin: auto; border: 1px solid #f39c12; }
-        input { width: 90%; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #333; background: #333; color: white; font-size: 18px; }
-        button { width: 100%; padding: 15px; background: #f39c12; border: none; border-radius: 10px; font-size: 18px; font-weight: bold; cursor: pointer; color: black; }
-        button:hover { background: #e67e22; }
-        h1 { color: #f39c12; }
-    </style>
+<title>Turbo26 Swap - Token Exchange</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body{background:#0a0a0a;color:white;font-family:sans-serif;text-align:center;padding:20px}
+.card{background:#1a1a1a;max-width:420px;margin:40px auto;padding:25px;border-radius:20px;border:1px solid #ff2d2d50}
+h1{color:#ff2d2d}
+input,select{width:90%;padding:14px;margin:10px 0;border-radius:10px;border:0;background:#2a2a2a;color:white;font-size:16px}
+.btn{background:#ff2d2d;color:white;padding:14px;width:95%;border:0;border-radius:12px;font-weight:bold;font-size:18px;cursor:pointer;margin-top:15px}
+.link{color:#ff2d2d;text-decoration:none}
+.small{color:#888;font-size:12px;margin-top:15px}
+</style>
 </head>
 <body>
-
-    <h1>🔥 TurboSwap</h1>
-    <p>TURBO Token ko USDT me swap karo</p>
-
-    <div class="box">
-        <button id="connectBtn">Connect Wallet</button>
-        
-        <div id="swapBox" style="display:none; margin-top:20px;">
-            <p><b>From</b></p>
-            <input type="number" id="fromAmount" placeholder="0.0">
-            <p>TURBO</p>
-
-            <p><b>To</b></p>
-            <input type="number" id="toAmount" placeholder="0.0" readonly>
-            <p>USDT</p>
-
-            <button id="swapBtn">Swap Now</button>
-        </div>
-    </div>
-
-<script>
-    const connectBtn = document.getElementById('connectBtn');
-    const swapBox = document.getElementById('swapBox');
-
-    // 1. Wallet Connect
-    connectBtn.onclick = async () => {
-        if (typeof window.ethereum !== 'undefined') {
-            await window.ethereum.request({ method: 'eth_requestAccounts' });
-            connectBtn.innerText = "Wallet Connected ✅";
-            connectBtn.style.background = "#2ecc71";
-            swapBox.style.display = "block";
-        } else {
-            alert("Pehle MetaMask install karo! https://metamask.io");
-        }
-    }
-
-    // 2. Price Calculation - 1 TURBO = 0.01 USDT
-    document.getElementById('fromAmount').oninput = (e) => {
-        document.getElementById('toAmount').value = e.target.value * 0.01;
-    }
-
-    // 3. Swap Button - Baad me contract address yaha dalenge
-    document.getElementById('swapBtn').onclick = () => {
-        alert("Swap ke liye Smart Contract abhi banana baki hai! \nPehle contract deploy karte hain.");
-    }
-</script>
-
+<h1>🔄 TURBO26 SWAP</h1>
+<p>Swap Turbo26 Token Instantly</p>
+<div class="card">
+<p>From</p>
+<select><option>BNB</option><option>USDT</option><option>ETH</option></select>
+<input type="number" placeholder="0.0">
+<p>To</p>
+<select><option selected>TURBO26</option></select>
+<input type="number" placeholder="0.0">
+<button class="btn" onclick="alert('Connect Wallet Coming Soon!')">Connect Wallet</button>
+<p class="small">Contract: 0x...Turbo26<br>Slippage: 5% | Chain: BSC</p>
+</div>
+<p><a class="link" href="/">← Back to Home</a></p>
+<p class="small">Turbo26 Token © 2026 | Kolkata</p>
 </body>
 </html>
