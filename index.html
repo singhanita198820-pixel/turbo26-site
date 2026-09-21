@@ -3,32 +3,52 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Turbo26 - Swap</title>
+<title>Turbo26 - Buy Token</title>
 <style>
-body{font-family:sans-serif;background:#0b0b0f;color:#fff;text-align:center;margin:0;padding:20px}
-.card{max-width:420px;margin:40px auto;background:#15151c;padding:24px;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,0.5)}
-input,button{width:100%;padding:14px;margin:8px 0;border-radius:10px;border:none;font-size:16px;box-sizing:border-box}
-input{background:#0b0b0f;color:#fff;border:1px solid #333}
-button{background:#ffcc00;color:#000;font-weight:bold;cursor:pointer}
-a{color:#ffcc00;text-decoration:none;font-size:14px;word-break:break-all}
-.small{font-size:12px;opacity:0.6;margin-top:10px}
+body{font-family:sans-serif;background:#0b0b0f;color:#fff;margin:0;padding:20px;text-align:center}
+.card{max-width:450px;margin:20px auto;background:#15151c;padding:22px;border-radius:16px;text-align:left}
+h1,h2{text-align:center} .center{text-align:center}
+.btn{width:100%;padding:14px;margin:8px 0;border-radius:10px;border:none;font-size:16px;font-weight:bold;cursor:pointer;display:block;text-decoration:none;text-align:center;box-sizing:border-box}
+.btn-yellow{background:#ffcc00;color:#000}
+.btn-white{background:#fff;color:#000}
+.btn-outline{background:transparent;border:1px solid #ffcc00;color:#ffcc00}
+input{width:100%;padding:12px;margin:8px 0;border-radius:10px;border:1px solid #333;background:#0b0b0f;color:#fff;box-sizing:border-box}
+.small{font-size:11px;opacity:0.6;text-align:center;word-break:break-all;margin-top:15px}
+.badge{display:inline-block;background:#222;padding:4px 10px;border-radius:20px;font-size:12px;margin:5px}
 </style>
 </head>
 <body>
+
 <h1>Turbo26</h1>
-<p>Official Token Swap - BSC</p>
+<p class="center">Official Token - BSC Network</p>
+<div class="center">
+<span class="badge">BEP-20</span> <span class="badge">Verified</span>
+</div>
+
+<!-- 1. INR GATEWAY -->
 <div class="card">
-<p><b>Swap BNB to TURBO26</b></p>
-<input type="number" placeholder="0.0 BNB" id="bnb">
-<input type="number" placeholder="0.0 TURBO26" id="turbo" readonly>
-<button onclick="alert('Connect Wallet - Swap Coming Soon')">Connect Wallet & Swap</button>
-<p style="margin-top:14px"><a href="privacy.html">Privacy Policy</a></p>
+<h2 style="margin:0">1. Buy with INR (UPI / Card)</h2>
+<p style="font-size:13px;opacity:0.7">Pay via UPI, get TURBO26 in wallet</p>
+<input type="number" placeholder="Enter INR Amount e.g. 1000">
+<a class="btn btn-yellow" href="https://onmeta.in" target="_blank">Buy with UPI / INR - OnMeta</a>
+<p style="font-size:11px;opacity:0.5">Powered by OnMeta / Transak - KYC required. After payment, token will be sent to your wallet automatically once you add API key.</p>
 </div>
+
+<!-- 2. CRYPTO SWAP -->
+<div class="card">
+<h2 style="margin:0">2. Swap with Crypto</h2>
+<p style="font-size:13px;opacity:0.7">Swap BNB to TURBO26 instantly</p>
+<a class="btn btn-white" href="https://pancakeswap.finance/swap?outputCurrency=0xe3890C17e8989B7cBDf0Ff0C82459D009ADCAE6B&inputCurrency=BNB" target="_blank">
+Swap BNB → TURBO26 on PancakeSwap
+</a>
+<button class="btn btn-outline" onclick="navigator.clipboard.writeText('0xe3890C17e8989B7cBDf0Ff0C82459D009ADCAE6B');alert('Contract Copied!')">Copy Contract Address</button>
+</div>
+
 <div class="small">
-Contract: <br>
-<a href="https://bscscan.com/token/0xe3890C17e8989B7cBDf0Ff0C82459D009ADCAE6B" target="_blank">0xe3890C17e8989B7cBDf0Ff0C82459D009ADCAE6B</a><br>
-Network: BSC (BEP-20) | 
-<a href="https://bscscan.com/token/0xe3890C17e8989B7cBDf0Ff0C82459D009ADCAE6B" target="_blank">View on BscScan</a>
+Contract: <a href="https://bscscan.com/token/0xe3890C17e8989B7cBDf0Ff0C82459D009ADCAE6B" target="_blank" style="color:#ffcc00">0xe3890C17e8989B7cBDf0Ff0C82459D009ADCAE6B</a><br>
+<a href="privacy.html" style="color:#ffcc00">Privacy Policy</a> | <a href="https://bscscan.com/token/0xe3890C17e8989B7cBDf0Ff0C82459D009ADCAE6B" target="_blank" style="color:#ffcc00">BscScan</a><br><br>
+For Payment Gateway Approval, you need Company PAN + GST + Refund Policy page
 </div>
+
 </body>
 </html>
