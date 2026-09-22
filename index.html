@@ -2,52 +2,45 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Turbo26 - Buy Token</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TURBO26 - Official Token</title>
 <style>
-body{font-family:sans-serif;background:#0b0b0f;color:#fff;margin:0;padding:20px;text-align:center}
-.card{max-width:450px;margin:20px auto;background:#15151c;padding:22px;border-radius:16px;text-align:left}
-h1,h2{text-align:center} .center{text-align:center}
-.btn{width:100%;padding:14px;margin:8px 0;border-radius:10px;border:none;font-size:16px;font-weight:bold;cursor:pointer;display:block;text-decoration:none;text-align:center;box-sizing:border-box}
-.btn-yellow{background:#ffcc00;color:#000}
-.btn-white{background:#fff;color:#000}
-.btn-outline{background:transparent;border:1px solid #ffcc00;color:#ffcc00}
-input{width:100%;padding:12px;margin:8px 0;border-radius:10px;border:1px solid #333;background:#0b0b0f;color:#fff;box-sizing:border-box}
-.small{font-size:11px;opacity:0.6;text-align:center;word-break:break-all;margin-top:15px}
-.badge{display:inline-block;background:#222;padding:4px 10px;border-radius:20px;font-size:12px;margin:5px}
+body { margin:0; background:#0a0a0a; color:white; font-family: Arial, sans-serif; text-align:center; }
+.header { padding:20px; background:#111; }
+.card { background:#151515; border:1px solid #222; border-radius:16px; padding:30px; max-width:550px; margin:50px auto; }
+.btn { display:block; background:#f0b90b; color:black; padding:16px; border-radius:12px; font-weight:bold; text-decoration:none; margin:20px 0; font-size:20px; }
+.btn2 { display:block; background:#222; color:white; border:1px solid #444; padding:12px; border-radius:10px; text-decoration:none; margin:10px 0; }
+.contract { background:#000; padding:12px; border-radius:8px; word-break:break-all; font-size:14px; margin:15px 0; border:1px solid #333; }
 </style>
 </head>
 <body>
 
-<h1>Turbo26</h1>
-<p class="center">Official Token - BSC Network</p>
-<div class="center">
-<span class="badge">BEP-20</span> <span class="badge">Verified</span>
+<div class="header">
+<h2>TURBO26</h2>
 </div>
 
-<!-- 1. INR GATEWAY -->
 <div class="card">
-<h2 style="margin:0">1. Buy with INR (UPI / Card)</h2>
-<p style="font-size:13px;opacity:0.7">Pay via UPI, get TURBO26 in wallet</p>
-<input type="number" placeholder="Enter INR Amount e.g. 1000">
-<a class="btn btn-yellow" href="https://onmeta.in" target="_blank">Buy with UPI / INR - OnMeta</a>
-<p style="font-size:11px;opacity:0.5">Powered by OnMeta / Transak - KYC required. After payment, token will be sent to your wallet automatically once you add API key.</p>
+<h1>🚀 Welcome to TURBO26</h1>
+<p>Official Token on BNB Smart Chain</p>
+
+<div class="contract">
+Contract: 0x5a11075C985404288497c59778179b8fE2559d6d<br><br>
+<button onclick="navigator.clipboard.writeText('0x5a11075C985404288497c59778179b8fE2559d6d'); alert('Copied!')" style="padding:8px 15px; border-radius:6px; cursor:pointer;">Copy Contract</button>
 </div>
 
-<!-- 2. CRYPTO SWAP -->
-<div class="card">
-<h2 style="margin:0">2. Swap with Crypto</h2>
-<p style="font-size:13px;opacity:0.7">Swap BNB to TURBO26 instantly</p>
-<a class="btn btn-white" href="https://pancakeswap.finance/swap?outputCurrency=0xe3890C17e8989B7cBDf0Ff0C82459D009ADCAE6B&inputCurrency=BNB" target="_blank">
-Swap BNB → TURBO26 on PancakeSwap
+<a class="btn" href="https://pancakeswap.finance/swap?outputCurrency=0x5a11075C985404288497c59778179b8fE2559d6d&inputCurrency=BNB&chainId=56" target="_blank">
+Buy TURBO26 Now
 </a>
-<button class="btn btn-outline" onclick="navigator.clipboard.writeText('0xe3890C17e8989B7cBDf0Ff0C82459D009ADCAE6B');alert('Contract Copied!')">Copy Contract Address</button>
-</div>
 
-<div class="small">
-Contract: <a href="https://bscscan.com/token/0xe3890C17e8989B7cBDf0Ff0C82459D009ADCAE6B" target="_blank" style="color:#ffcc00">0xe3890C17e8989B7cBDf0Ff0C82459D009ADCAE6B</a><br>
-<a href="privacy.html" style="color:#ffcc00">Privacy Policy</a> | <a href="https://bscscan.com/token/0xe3890C17e8989B7cBDf0Ff0C82459D009ADCAE6B" target="_blank" style="color:#ffcc00">BscScan</a><br><br>
-For Payment Gateway Approval, you need Company PAN + GST + Refund Policy page
+<a class="btn2" href="./swap.html">Open Swap Page</a>
+<a class="btn2" href="https://bscscan.com/token/0x5a11075C985404288497c59778179b8fE2559d6d" target="_blank">View on BscScan</a>
+<a class="btn2" href="https://poocoin.app/tokens/0x5a11075C985404288497c59778179b8fE2559d6d" target="_blank">Chart - PooCoin</a>
+
+<p style="color:#888; font-size:13px; margin-top:25px;">
+Total Supply: 10 Crore<br>
+Price: 30 Lakh TURBO26 = 1 BNB<br>
+Chain: BNB Smart Chain (BEP20)
+</p>
 </div>
 
 </body>
