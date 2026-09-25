@@ -1,0 +1,21 @@
+{
+  "name": "TURBO26",
+  "symbol": "TURBO26",
+  "type": "BEP20",
+  "decimals": 18,
+  "description": "TURBO26 is a next-gen community driven deflationary token on BNB Smart Chain with turbo-powered growth.",
+  "website": "https://turbo26.in",
+  "explorer": "https://bscscan.com/token/0x5a11075C985404288497c59778179b8fe2559d6d",
+  "status": "active",
+  "id": "0x5a11075C985404288497c59778179b8fe2559d6d",
+  "links": [
+    {
+      "name": "website",
+      "url": "https://turbo26.in"
+    },
+    {
+      "name": "telegram",
+      "url": "https://t.me/turbo26_official"
+    }
+  ]
+}
