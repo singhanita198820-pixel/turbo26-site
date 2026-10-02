@@ -6,15 +6,17 @@
 <title>TURBO26 - BSC Verified | Built for Speed</title>
 <style>
 *{box-sizing:border-box} body{margin:0; background:#061412; color:#fff; font-family:Inter, sans-serif;}
-.nav{position:sticky; top:0; display:flex; justify-content:space-between; align-items:center; padding:14px 5%; background:#000; border-bottom:1px solid #0a2e26; z-index:10;}
-.logo{color:#00e5a0; font-weight:900; font-size:20px;}
-.btn{padding:10px 18px; border-radius:24px; text-decoration:none; font-weight:800; font-size:13px; display:inline-block; cursor:pointer; border:none; text-align:center;}
+.nav{display:flex; justify-content:space-between; align-items:center; padding:14px 5%; background:#000; border-bottom:1px solid #0a2e26; position:sticky; top:0; z-index:10;}
+.logo{color:#00e5a0; font-weight:900; font-size:20px; letter-spacing:1px;}
+.btn{padding:11px 18px; border-radius:24px; text-decoration:none; font-weight:800; font-size:13px; display:inline-block; cursor:pointer; border:none; text-align:center; width:100%;}
 .btn-g{background:#00e5a0; color:#000;} .btn-y{background:#f3ba2f; color:#000;} .btn-p{background:#8247e5; color:#fff;} .btn-o{background:transparent; border:1px solid #00e5a0; color:#00e5a0;}
-.hero{display:grid; grid-template-columns:1.2fr 0.8fr; gap:20px; padding:30px 5%; max-width:1300px; margin:auto;}
+.hero{display:grid; grid-template-columns:1.25fr 0.75fr; gap:20px; padding:30px 5%; max-width:1300px; margin:auto;}
 @media(max-width:900px){.hero{grid-template-columns:1fr;}}
 .card{background:rgba(0,229,160,0.08); border:1px solid rgba(0,229,160,0.28); border-radius:18px; padding:18px;}
 .ca{background:#000; border:1px solid #222; border-radius:12px; padding:12px; display:flex; justify-content:space-between; align-items:center; gap:8px;}
 .grid{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px;}
+.contact{margin-top:25px; background:#000; border:1px solid #0a2e26; border-radius:16px; padding:16px; text-align:center;}
+.contact a{color:#00e5a0; text-decoration:none; font-weight:800;}
 .footer{display:flex; gap:10px; justify-content:center; flex-wrap:wrap; padding:20px; border-top:1px solid #0a2e26; margin-top:20px;}
 .footer a{border:1px solid #163a32; background:#0a1f1b; color:#00e5a0; padding:8px 14px; border-radius:20px; text-decoration:none; font-size:12px;}
 </style>
@@ -24,15 +26,15 @@
 <div class="nav">
   <div class="logo">⚡ TURBO26</div>
   <div style="display:flex; gap:8px;">
-    <a class="btn btn-g" href="https://t.me/TURBO26Official" target="_blank">Telegram</a>
-    <a class="btn btn-o" href="https://x.com/TURBO26officia1" target="_blank">Twitter</a>
+    <a href="https://t.me/TURBO26Official" target="_blank" class="btn" style="width:auto; background:#00e5a0; color:#000; padding:8px 14px;">Telegram</a>
+    <a href="https://x.com/TURBO26officia1" target="_blank" class="btn" style="width:auto; border:1px solid #00e5a0; color:#00e5a0; padding:8px 14px;">Twitter</a>
   </div>
 </div>
 
 <div class="hero">
   <div>
-    <h1 style="font-size:54px; color:#00e5a0; margin:0; line-height:0.9;">TURBO26</h1>
-    <p style="color:#9ee6d0; line-height:1.6;">Built for Speed. Powered by Community. BSC Verified 26M Supply. From Kolkata.</p>
+    <h1 style="font-size:56px; color:#00e5a0; margin:0; line-height:0.9;">TURBO26</h1>
+    <p style="color:#9ee6d0;">Built for Speed. Powered by Community. BSC Verified 26M Supply. From Kolkata.</p>
 
     <div class="card">
       <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
@@ -40,23 +42,29 @@
         <span style="background:#00e5a0; color:#000; font-size:10px; padding:3px 8px; border-radius:20px; font-weight:800;">LIVE</span>
       </div>
       <div class="ca">
-        <span style="font-family:monospace; font-size:11px; overflow:hidden; text-overflow:ellipsis;">0x5a11075C985404288497c59778179b8fE2559d6d</span>
-        <button onclick="navigator.clipboard.writeText('0x5a11075C985404288497c59778179b8fE2559d6d'); alert('Copied!')" class="btn btn-g" style="padding:6px 12px;">Copy</button>
+        <span id="caText" style="font-family:monospace; font-size:11px;">0x5a11075C985404288497c59778179b8fE2559d6d</span>
+        <button type="button" id="copyBtn" class="btn btn-g" style="width:auto; padding:6px 14px;">Copy</button>
       </div>
 
-      <!-- SAB BUTTON EK SATH -->
+      <!-- RECTIFIED BUTTONS - AB 100% KAAM KAREGA -->
       <div class="grid">
-        <button onclick="addBSC()" class="btn btn-y">➕ Add BSC Network</button>
-        <button onclick="addPOL()" class="btn btn-p">➕ Add POL Network</button>
-        <button onclick="addTokenBSC()" class="btn btn-g">🦊 Add TURBO26 BSC</button>
-        <button onclick="addTokenPOL()" class="btn btn-o">🦊 Add TURBO26 POL</button>
+        <button type="button" id="btnBSC" class="btn btn-y">➕ Add BSC Network</button>
+        <button type="button" id="btnPOL" class="btn btn-p">➕ Add POL Network</button>
+        <button type="button" id="btnTokenBSC" class="btn btn-g">🦊 Add TURBO26 BSC</button>
+        <button type="button" id="btnTokenPOL" class="btn btn-o">🦊 Add TURBO26 POL</button>
         <a href="https://pancakeswap.finance/swap?outputCurrency=0x5a11075C985404288497c59778179b8fE2559d6d&chain=bsc" target="_blank" class="btn btn-g">Buy on PancakeSwap</a>
         <a href="https://bscscan.com/address/0x5a11075C985404288497c59778179b8fE2559d6d" target="_blank" class="btn btn-o" style="background:rgba(255,255,255,0.05); border-color:#333; color:#fff;">BSCScan</a>
-      </div>
-
-      <div class="grid" style="margin-top:10px;">
         <a href="https://t.me/TURBO26Official" target="_blank" class="btn btn-g">🚀 t.me/TURBO26Official</a>
         <a href="https://x.com/TURBO26officia1" target="_blank" class="btn btn-o">𝕏 @TURBO26officia1</a>
+      </div>
+
+      <!-- CONTACT US ADDED -->
+      <div class="contact">
+        <div style="font-size:12px; color:#888; margin-bottom:4px;">CONTACT US</div>
+        <a href="mailto:info@turbo26.in">📧 info@turbo26.in</a>
+        <span style="color:#444; margin:0 6px;">|</span>
+        <a href="mailto:info@turbo.in">info@turbo.in</a>
+        <div style="font-size:11px; color:#666; margin-top:6px;">For listing, partnership & support - Mail us 24/7</div>
       </div>
     </div>
   </div>
@@ -67,21 +75,72 @@
       ● 40% Liquidity (Locked)<br>● 25% Community & Airdrops<br>● 15% Marketing & CEX<br>● 12% Development<br>● 8% Team (1 Year Locked)
     </div>
     <div style="margin-top:14px; height:5px; background:linear-gradient(90deg,#00e5a0,#f3ba2f,#8247e5); border-radius:10px;"></div>
+    <div style="margin-top:20px; font-size:11px; color:#666; text-align:center;">Email: info@turbo26.in | Kolkata, India</div>
   </div>
 </div>
 
 <div class="footer">
-  <a href="https://t.me/TURBO26Official">Telegram @TURBO26Official</a>
-  <a href="https://x.com/TURBO26officia1">Twitter @TURBO26officia1</a>
-  <a href="https://bscscan.com/address/0x5a11075C985404288497c59778179b8fE2559d6d">BSCScan Verified</a>
+  <a href="https://t.me/TURBO26Official" target="_blank">Telegram @TURBO26Official</a>
+  <a href="https://x.com/TURBO26officia1" target="_blank">Twitter @TURBO26officia1</a>
+  <a href="mailto:info@turbo26.in">Contact: info@turbo26.in</a>
+  <a href="https://bscscan.com/address/0x5a11075C985404288497c59778179b8fE2559d6d" target="_blank">BSCScan Verified</a>
 </div>
 
 <script>
-const CA="0x5a11075C985404288497c59778179b8fE2559d6d";
-async function addBSC(){ await ethereum.request({method:'wallet_addEthereumChain', params:[{chainId:'0x38', chainName:'BSC Mainnet', rpcUrls:['https://bsc-dataseed.binance.org/'], nativeCurrency:{name:'BNB',symbol:'BNB',decimals:18}, blockExplorerUrls:['https://bscscan.com']}]}); alert("BSC Added ✅"); }
-async function addPOL(){ await ethereum.request({method:'wallet_addEthereumChain', params:[{chainId:'0x89', chainName:'Polygon Mainnet', rpcUrls:['https://polygon-rpc.com/'], nativeCurrency:{name:'POL',symbol:'POL',decimals:18}, blockExplorerUrls:['https://polygonscan.com']}]}); alert("POLYGON Added ✅"); }
-async function addTokenBSC(){ try{await ethereum.request({method:'wallet_switchEthereumChain',params:[{chainId:'0x38'}]});}catch(e){await addBSC();} await ethereum.request({method:'wallet_watchAsset',params:{type:'ERC20',options:{address:CA,symbol:'TURBO26',decimals:18,image:'https://turbo26.in/logo.png'}}}); }
-async function addTokenPOL(){ try{await ethereum.request({method:'wallet_switchEthereumChain',params:[{chainId:'0x89'}]});}catch(e){await addPOL();} await ethereum.request({method:'wallet_watchAsset',params:{type:'ERC20',options:{address:CA,symbol:'TURBO26',decimals:18,image:'https://turbo26.in/logo.png'}}}); }
+// ---- FIXED SCRIPT - BUTTON AB KAAM KAREGA ----
+const CA = "0x5a11075C985404288497c59778179b8fE2559d6d";
+const getProvider = () => window.ethereum || window.phantom?.ethereum || null;
+
+function needMM(){
+  const isMobile = /Android|iPhone|iPad/i.test(navigator.userAgent);
+  if(isMobile){
+    alert("📱 Mobile pe MetaMask App me kholo:\n1. MetaMask App open karo\n2. Browser me turbo26.in likho\n3. Fir button dabao");
+    window.location.href = "https://metamask.app.link/dapp/turbo26.in";
+  } else {
+    alert("🦊 Laptop pe MetaMask Extension install karo, fir refresh karo");
+    window.open("https://metamask.io/download/","_blank");
+  }
+}
+
+document.getElementById('copyBtn').onclick = () => {
+  navigator.clipboard.writeText(CA);
+  const b = document.getElementById('copyBtn');
+  b.innerText="Copied!"; setTimeout(()=>b.innerText="Copy",1500);
+};
+
+document.getElementById('btnBSC').onclick = async () => {
+  const p = getProvider(); if(!p) return needMM();
+  try{
+    await p.request({method:'wallet_addEthereumChain', params:[{chainId:'0x38', chainName:'BNB Smart Chain', rpcUrls:['https://bsc-dataseed.binance.org/'], nativeCurrency:{name:'BNB',symbol:'BNB',decimals:18}, blockExplorerUrls:['https://bscscan.com']}]});
+    alert("✅ BSC Network Added!");
+  }catch(e){ alert(e.message); }
+};
+
+document.getElementById('btnPOL').onclick = async () => {
+  const p = getProvider(); if(!p) return needMM();
+  try{
+    await p.request({method:'wallet_addEthereumChain', params:[{chainId:'0x89', chainName:'Polygon Mainnet', rpcUrls:['https://polygon-rpc.com/'], nativeCurrency:{name:'POL',symbol:'POL',decimals:18}, blockExplorerUrls:['https://polygonscan.com']}]});
+    alert("✅ POLYGON (POL) Added!");
+  }catch(e){ alert(e.message); }
+};
+
+document.getElementById('btnTokenBSC').onclick = async () => {
+  const p = getProvider(); if(!p) return needMM();
+  try{ await p.request({method:'wallet_switchEthereumChain', params:[{chainId:'0x38'}]}); }catch(e){ if(e.code===4902) await document.getElementById('btnBSC').click(); }
+  try{
+    await p.request({method:'wallet_watchAsset', params:{type:'ERC20', options:{address:CA, symbol:'TURBO26', decimals:18, image:'https://turbo26.in/logo.png'}}});
+    alert("✅ TURBO26 Added to MetaMask!");
+  }catch(e){ alert(e.message); }
+};
+
+document.getElementById('btnTokenPOL').onclick = async () => {
+  const p = getProvider(); if(!p) return needMM();
+  try{ await p.request({method:'wallet_switchEthereumChain', params:[{chainId:'0x89'}]}); }catch(e){ if(e.code===4902) await document.getElementById('btnPOL').click(); }
+  try{
+    await p.request({method:'wallet_watchAsset', params:{type:'ERC20', options:{address:CA, symbol:'TURBO26', decimals:18, image:'https://turbo26.in/logo.png'}}});
+    alert("✅ TURBO26 POL Added!");
+  }catch(e){ alert(e.message); }
+};
 </script>
 </body>
 </html>
