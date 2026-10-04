@@ -111,7 +111,7 @@ async function addNetwork(chain){
  if(!window.ethereum)return alert("Please install MetaMask");
  const n={
    bsc:{chainId:"0x38",chainName:"BNB Smart Chain",rpcUrls:["https://bsc-dataseed.binance.org/"],nativeCurrency:{name:"BNB",symbol:"BNB",decimals:18},blockExplorerUrls:["https://bscscan.com"]},
-   polygon:{chainId:"0x89",chainName:"Polygon Mainnet",rpcUrls:["https://polygon-rpc.com/"],nativeCurrency:{name:"MATIC",symbol:"MATIC",decimals:18},blockExplorerUrls:["https://polygonscan.com"]},
+   polygon:{chainId:"0x89",chainName:"Polygon Mainnet",rpcUrls:["https://polygon-rpc.com/"],nativeCurrency:{name:"POL",symbol:"MATIC",decimals:18},blockExplorerUrls:["https://polygonscan.com"]},
    base:{chainId:"0x2105",chainName:"Base Mainnet",rpcUrls:["https://mainnet.base.org"],nativeCurrency:{name:"ETH",symbol:"ETH",decimals:18},blockExplorerUrls:["https://basescan.org"]}
  }
  try{await ethereum.request({method:"wallet_addEthereumChain",params:[n[chain]]})}catch(e){alert(e.message)}
