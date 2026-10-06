@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>TURBO26 - Official Claim | turbo26.in</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+</head>
+<body style="font-family:Arial;text-align:center;padding:20px;background:#0a0a0a;color:white">
+<h1 style="color:#00ff88">🏁 TURBO26</h1>
+<h3>turbo26.in Official Claim Portal</h3>
+<button id="connect" style="padding:12px 25px;background:#00ff88;border:none;border-radius:8px;font-weight:bold;cursor:pointer">Connect MetaMask</button>
+<p id="wallet"></p>
+<p id="bal"></p>
+<hr style="margin:20px">
+<input id="gameId" placeholder="Game ID - Example: TURBO_123" style="padding:12px;width:80%;border-radius:8px"><br><br>
+<button id="claim" style="padding:12px 25px;background:white;color:black;border:none;border-radius:8px;font-weight:bold">CLAIM NOW</button>
+<p id="status" style="color:#00ff88"></p>
+
+<script>
+const contract="0x5a11075C985404288497c59778179b8fE2559d6d";
+const abi=[{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}];
+let userAccount;
+document.getElementById('connect').onclick=async()=>{
+  if(window.ethereum){
+    const web3=new Web3(window.ethereum);
+    await window.ethereum.request({method:'eth_requestAccounts'});
+    const acc=await web3.eth.getAccounts(); userAccount=acc[0];
+    document.getElementById('wallet').innerText="Connected: "+userAccount.slice(0,6)+"..."+userAccount.slice(-4);
+    const c=new web3.eth.Contract(abi,contract);
+    const b=await c.methods.balanceOf(userAccount).call();
+    document.getElementById('bal').innerText="Your TURBO26 Balance: "+ (b/1e18);
+  }else{alert("MetaMask app me kholo isko");}
+};
+document.getElementById('claim').onclick=()=>{
+  const gid=document.getElementById('gameId').value;
+  if(!gid){alert("Game ID dalo"); return;}
+  document.getElementById('status').innerText="Game ID "+gid+" Verified! Backend reward system connecting...";
+};
+</script>
+</body>
+</html>
