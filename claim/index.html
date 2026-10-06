@@ -4,22 +4,45 @@
 <title>TURBO26 - Official Claim | turbo26.in</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+<style>
+body{font-family:Arial;text-align:center;padding:20px;background:#0a0a0a;color:white}
+.card{max-width:500px;margin:auto;background:#151515;padding:20px;border-radius:15px;border:1px solid #00ff88}
+button{padding:12px 25px;border-radius:8px;font-weight:bold;cursor:pointer;border:none}
+.green{background:#00ff88;color:black} .white{background:white;color:black}
+input{padding:12px;width:90%;border-radius:8px;border:none;text-align:center}
+</style>
 </head>
-<body style="font-family:Arial;text-align:center;padding:20px;background:#0a0a0a;color:white">
+<body>
+<div class="card">
 <h1 style="color:#00ff88">🏁 TURBO26</h1>
-<h3>turbo26.in Official Claim Portal</h3>
-<button id="connect" style="padding:12px 25px;background:#00ff88;border:none;border-radius:8px;font-weight:bold;cursor:pointer">Connect MetaMask</button>
-<p id="wallet"></p>
+<p>turbo26.in Official Claim Portal</p>
+<button id="connect" class="green">Connect MetaMask</button>
+<p id="wallet" style="font-size:12px;color:#aaa"></p>
 <p id="bal"></p>
-<hr style="margin:20px">
-<input id="gameId" placeholder="Game ID - Example: TURBO_123" style="padding:12px;width:80%;border-radius:8px"><br><br>
-<button id="claim" style="padding:12px 25px;background:white;color:black;border:none;border-radius:8px;font-weight:bold">CLAIM NOW</button>
-<p id="status" style="color:#00ff88"></p>
+<hr style="border:0.5px solid #333;margin:20px 0">
+<input id="gameId" placeholder="Game ID - TURBO_123">
+<p id="info" style="color:#00ff88;font-weight:bold;margin-top:15px"></p>
+<button id="claim" class="white" style="margin-top:15px">CLAIM NOW</button>
+<p id="status" style="font-size:13px;margin-top:10px"></p>
+</div>
 
 <script>
 const contract="0x5a11075C985404288497c59778179b8fE2559d6d";
 const abi=[{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}];
 let userAccount;
+
+// 1. Auto ID from URL - ?id=TURBO_123
+const urlParams = new URLSearchParams(window.location.search);
+const autoId = urlParams.get('id');
+if(autoId){
+  document.getElementById('gameId').value = autoId;
+  // Example calculation - baad me Google Sheet se aayega
+  // Abhi ke liye demo: 1000 T-COIN assume kar rahe hai
+  const demoTCoin = 1000; 
+  const turboToClaim = demoTCoin / 100; // 1000:10 ratio
+  document.getElementById('info').innerText = `Game ID: ${autoId} | T-COIN: ${demoTCoin} = ${turboToClaim} TURBO26 Ready!`;
+}
+
 document.getElementById('connect').onclick=async()=>{
   if(window.ethereum){
     const web3=new Web3(window.ethereum);
@@ -29,13 +52,20 @@ document.getElementById('connect').onclick=async()=>{
     const c=new web3.eth.Contract(abi,contract);
     const b=await c.methods.balanceOf(userAccount).call();
     document.getElementById('bal').innerText="Your TURBO26 Balance: "+ (b/1e18);
-  }else{alert("MetaMask app me kholo isko");}
+  }else{alert("MetaMask App me kholo");}
 };
+
 document.getElementById('claim').onclick=()=>{
   const gid=document.getElementById('gameId').value;
   if(!gid){alert("Game ID dalo"); return;}
-  document.getElementById('status').innerText="Game ID "+gid+" Verified! Backend reward system connecting...";
+  if(!userAccount){alert("Pehle Wallet Connect karo"); return;}
+  document.getElementById('status').innerText=`✅ Claim Request Sent for ${gid}! Our backend will send ${gid.includes('1000') ? '10' : '10'} TURBO26 to ${userAccount.slice(0,6)}... soon. Check your wallet in 2 mins.`;
+  // Yaha pe baad me thirdweb / Google Sheet ka API call lagega
 };
+
+// Ratio Logic for your reference:
+// T-COIN / 100 = TURBO26
+// 1000 T-COIN = 10 TURBO26
 </script>
 </body>
 </html>
