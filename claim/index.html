@@ -55,12 +55,30 @@ document.getElementById('connect').onclick=async()=>{
   }else{alert("MetaMask App me kholo");}
 };
 
-document.getElementById('claim').onclick=()=>{
+document.getElementById('claim').onclick=async()=>{
   const gid=document.getElementById('gameId').value;
   if(!gid){alert("Game ID dalo"); return;}
   if(!userAccount){alert("Pehle Wallet Connect karo"); return;}
-  document.getElementById('status').innerText=`✅ Claim Request Sent for ${gid}! Our backend will send ${gid.includes('1000') ? '10' : '10'} TURBO26 to ${userAccount.slice(0,6)}... soon. Check your wallet in 2 mins.`;
-  // Yaha pe baad me thirdweb / Google Sheet ka API call lagega
+  
+  // Ratio Logic: 100 T-COIN = 1 TURBO26
+  const tCoinPoints = parseInt(gid);
+  const turboAmount = tCoinPoints / 100;
+  
+  if(turboAmount <= 0){alert("Valid Game ID dalo"); return;}
+
+  document.getElementById('status').innerText= `⏳ Claim Request Sent for ${turboAmount} TURBO26...`;
+  
+  // Aapka wahi Google Sheet wala URL
+  const sheetURL = `https://script.google.com/macros/s/AKfycbwQw9hn9MaCKsySsfWHBTw68CFw7Bb_sxrhTC3_38QEXU2MpWkrGV-MynkB2Sh2plY0ow/exec?wallet=${userAccount}&points=${tCoinPoints}&turbo=${turboAmount}&gameId=${gid}&key=TURBO26SECURE2026`;
+
+  try{
+    const response = await fetch(sheetURL);
+    const result = await response.text();
+    document.getElementById('status').innerText= `✅ Claim Successful! ${turboAmount} TURBO26 ke liye request chali gayi. Sheet me check karo.`;
+    alert(`Mubarak ho! ${tCoinPoints} T-COIN = ${turboAmount} TURBO26 Claim ho gaya!`);
+  }catch(err){
+    document.getElementById('status').innerText= `❌ Error: ${err.message}`;
+  }
 };
 
 // Ratio Logic for your reference:
