@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Turbo26 - Staking | Stake & Earn</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}
+  body{background:#0a0a0a;color:#fff;padding:20px}
+  .container{max-width:1000px;margin:auto}
+  .header{text-align:center;padding:40px 10px}
+  .header h1{font-size:42px;color:#FFD500;line-height:1.1}
+  .header h1 span{color:#fff}
+  .header p{color:#aaa;margin-top:12px;font-size:16px}
+  .wallet-btn{background:#FFD500;color:#000;border:none;padding:14px 28px;font-weight:800;border-radius:10px;cursor:pointer;font-size:16px;margin-top:20px}
+  .chain-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:18px}
+  .chain-row button{padding:11px 20px;border-radius:20px;font-weight:800;border:2px solid transparent;cursor:pointer;font-size:14px}
+  .chain-row button.active{border-color:#fff;transform:scale(1.05)}
+  .contract-box{background:#1a1a1a;border:1px solid #333;padding:12px;border-radius:10px;margin:16px 0;font-size:13px;word-break:break-all;text-align:center;color:#aaa}
+  .contract-box b{color:#FFD500}
+  .stats{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:20px 0}
+  .stat{background:#1a1a1a;border:1px solid #333;padding:16px 20px;border-radius:12px;text-align:center;min-width:160px}
+  .stat b{color:#FFD500;font-size:20px;display:block}
+  .stat span{color:#aaa;font-size:13px}
+  .calc{background:#1a1a1a;border:2px solid #FFD500;padding:24px;border-radius:16px;margin:20px 0}
+  .calc h2{color:#FFD500;margin-bottom:16px}
+  .calc label{color:#aaa;font-size:14px}
+  .calc input{width:100%;padding:14px;margin:8px 0 16px 0;background:#000;border:1px solid #444;color:#fff;border-radius:10px;font-size:18px}
+  .days{display:flex;gap:10px;margin-bottom:16px}
+  .days button{flex:1;padding:12px;border:1px solid #444;background:#000;color:#fff;border-radius:10px;cursor:pointer;font-weight:700}
+  .days button.active{background:#FFD500;color:#000}
+  .result{background:#000;padding:16px;border-radius:10px;display:flex;justify-content:space-between;align-items:center}
+  .result b{color:#FFD500;font-size:24px}
+  .plans{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:20px 0}
+  @media(max-width:700px){.plans{grid-template-columns:1fr}.header h1{font-size:32px}}
+  .card{background:#1a1a1a;border:1px solid #333;padding:22px;border-radius:16px;text-align:center;position:relative}
+  .card.popular{border:2px solid #FFD500}
+  .badge{background:#FFD500;color:#000;font-size:12px;font-weight:800;padding:4px 10px;border-radius:20px;position:absolute;top:-12px;left:50%;transform:translateX(-50%)}
+  .card h3{font-size:22px;margin:10px 0}
+  .card .apy{font-size:36px;color:#FFD500;font-weight:900}
+  .card p{color:#aaa;font-size:14px;margin:8px 0;line-height:1.5}
+  .card button{width:100%;padding:12px;background:#FFD500;border:none;border-radius:10px;font-weight:800;cursor:pointer;margin-top:14px}
+  .footer{text-align:center;color:#555;font-size:12px;padding:20px}
+  #myStake{display:none;background:#0f2a00;border:1px solid #2ecc71;padding:16px;border-radius:12px;margin:20px 0}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>STAKE TURBO26<br><span>EARN MORE TURBO26</span></h1>
+    <p>Apne Coin ko Lock karo, Game khelo, aur har din Reward kamao.</p>
+    <button class="wallet-btn" id="connectBtn" onclick="connectWallet()">CONNECT WALLET</button>
+    <p id="walletAddr" style="color:#2ecc71;margin-top:10px"></p>
+    <div class="chain-row">
+      <button id="btn-BNB" onclick="switchChain('BNB')" class="active" style="background:#F0B90B;color:#000">🟡 BNB Chain</button>
+      <button id="btn-POLYGON" onclick="switchChain('POLYGON')" style="background:#7B3FE4;color:#fff">🟣 Polygon</button>
+      <button id="btn-BASE" onclick="switchChain('BASE')" style="background:#0052FF;color:#fff">🔵 Base</button>
+    </div>
+    <div class="contract-box">
+      <b id="chainStatus">BNB Chain Selected</b><br>
+      Token Contract: 0x5a11075C985404288497c59778179b8fE2559d6d<br>
+      <a href="#" id="explorerLink" style="color:#FFD500">View on Explorer ↗</a>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><b id="totalStaked">0</b><span>Total Staked</span></div>
+    <div class="stat"><b>12</b><span>Total Stakers</span></div>
+    <div class="stat"><b>5,200,000</b><span>Reward Pool</span></div>
+  </div>
+
+  <div id="myStake"><b style="color:#2ecc71">✅ Tumhara Active Stake:</b> <span id="myStakeText"></span></div>
+
+  <div class="calc">
+    <h2>🧮 Staking Calculator</h2>
+    <label>Tum kitna Stake karoge? (TURBO26)</label>
+    <input type="number" id="amount" value="1000" min="260" oninput="calc()">
+    <label>Kitne din ke liye?</label>
+    <div class="days">
+      <button onclick="setDays(7,this)">7 Din - 5%</button>
+      <button onclick="setDays(30,this)" class="active">30 Din - 15%</button>
+      <button onclick="setDays(90,this)">90 Din - 35%</button>
+    </div>
+    <div class="result">
+      <div><small style="color:#aaa">Tumko Milega</small><br><b id="returnAmt">1150 TURBO26</b></div>
+      <div style="text-align:right"><small style="color:#aaa">Profit</small><br><b id="profitAmt" style="color:#2ecc71">+150</b></div>
+    </div>
+    <button class="wallet-btn" style="width:100%;margin-top:16px" onclick="stakeNow()">STAKE NOW 🚀</button>
+  </div>
+
+  <div class="plans">
+    <div class="card"><h3>🏁 STARTER</h3><div class="apy">5%</div><p>7 Din Lock<br>Min 260 Coin</p><button onclick="quickStake(260,7)">STAKE STARTER</button></div>
+    <div class="card popular"><div class="badge">MOST POPULAR 🔥</div><h3>⚡ PRO</h3><div class="apy">15%</div><p>30 Din Lock<br>Min 1000 Coin<br>+ Daily Free Turbo Boost</p><button onclick="quickStake(1000,30)">STAKE PRO</button></div>
+    <div class="card"><h3>👑 KING</h3><div class="apy">35%</div><p>90 Din Lock<br>Min 5000 Coin<br>+ VIP Skin + King Tag</p><button onclick="quickStake(5000,90)">STAKE KING</button></div>
+  </div>
+
+  <div class="footer">© 2026 Turbo26 - turbo26.in | Contract: 0x5a11075C985404288497c59778179b8fE2559d6d<br>Total Supply: 26,000,000 | Staking Pool: 5,200,000 (20%)</div>
+</div>
+
+<script>
+const TOKEN_ADDRESS = "0x5a11075C985404288497c59778179b8fE2559d6d";
+let selectedChain = 'BNB';
+let selectedDays = 30;
+let selectedRate = 0.15;
+let walletConnected = false;
+let totalStaked = 0;
+
+const EXPLORERS = {
+  BNB: "https://bscscan.com/token/" + TOKEN_ADDRESS,
+  POLYGON: "https://polygonscan.com/token/" + TOKEN_ADDRESS,
+  BASE: "https://basescan.org/token/" + TOKEN_ADDRESS
+};
+
+function switchChain(chain){
+  selectedChain = chain;
+  document.querySelectorAll('.chain-row button').forEach(b=>b.classList.remove('active'));
+  document.getElementById('btn-'+chain).classList.add('active');
+  document.getElementById('chainStatus').innerText = chain + ' Chain Selected';
+  document.getElementById('explorerLink').href = EXPLORERS[chain];
+  document.getElementById('explorerLink').innerText = 'View on ' + chain + ' Explorer ↗';
+}
+function setDays(days, el){
+  selectedDays = days;
+  selectedRate = days===7 ? 0.05 : days===30 ? 0.15 : 0.35;
+  document.querySelectorAll('.days button').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  calc();
+}
+function calc(){
+  let amt = parseFloat(document.getElementById('amount').value) || 0;
+  let profit = Math.floor(amt * selectedRate);
+  document.getElementById('returnAmt').innerText = (amt+profit).toLocaleString('en-IN') + ' TURBO26';
+  document.getElementById('profitAmt').innerText = '+' + profit.toLocaleString('en-IN');
+}
+function connectWallet(){
+  walletConnected = true;
+  let fake = '0x' + Math.random().toString(16).slice(2,8).toUpperCase() + '...26';
+  document.getElementById('walletAddr').innerText = 'Connected: ' + fake + ' on ' + selectedChain;
+  document.getElementById('connectBtn').innerText = 'WALLET CONNECTED ✅';
+  alert('Wallet Connected on ' + selectedChain + '!\nToken: ' + TOKEN_ADDRESS);
+}
+function stakeNow(){
+  let amt = parseFloat(document.getElementById('amount').value) || 0;
+  if(!walletConnected){ alert('Pehle Wallet Connect Karo!'); return; }
+  if(amt < 260){ alert('Minimum 260 Coin chahiye!'); return; }
+  doStake(amt, selectedDays, selectedRate);
+}
+function quickStake(amt, days){
+  document.getElementById('amount').value = amt;
+  selectedDays = days; selectedRate = days===7 ? 0.05 : days===30 ? 0.15 : 0.35;
+  document.querySelectorAll('.days button').forEach((b,i)=>{ b.classList.toggle('active', (i===0 && days===7)||(i===1 && days===30)||(i===2 && days===90)); });
+  calc(); stakeNow();
+}
+function doStake(amt, days, rate){
+  let profit = Math.floor(amt * rate);
+  totalStaked += amt;
+  document.getElementById('totalStaked').innerText = totalStaked.toLocaleString('en-IN');
+  document.getElementById('myStake').style.display = 'block';
+  document.getElementById('myStakeText').innerText = amt + ' Coin for ' + days + ' Din on ' + selectedChain + ' | Reward: ' + profit + ' Coin';
+  alert('Success! ' + amt + ' TURBO26 Staked on ' + selectedChain + '\n' + days + ' din baad: ' + (amt+profit) + ' Coin milenge!');
+}
+switchChain('BNB'); calc();
+</script>
+</body>
+</html>
