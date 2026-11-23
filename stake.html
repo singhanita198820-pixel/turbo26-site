@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TURBO26 - Stake & Play Games</title>
+<script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:#0a0a0f;color:#fff}
+header{background:#111118;padding:15px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;flex-wrap:wrap;gap:10px}
+.logo{font-size:24px;font-weight:900;color:#facc15}
+.logo span{color:#fff}
+nav{display:flex;gap:10px;flex-wrap:wrap}
+nav button{background:#222;padding:10px 18px;border:1px solid #333;color:#fff;border-radius:10px;cursor:pointer;font-weight:700}
+nav button.active,nav button:hover{background:#facc15;color:#000}
+.wallet{background:#1a1a25;padding:10px 15px;border-radius:12px;text-align:right;font-size:13px;min-width:170px}
+.wallet b{color:#facc15}
+.btn{background:#facc15;color:#000;border:none;padding:12px 20px;border-radius:10px;font-weight:800;cursor:pointer;width:100%;margin-top:10px}
+.btn2{background:#22c55e;color:#fff;border:none;padding:10px 16px;border-radius:10px;font-weight:700;cursor:pointer}
+.card{background:#15151f;border:1px solid #2a2a3a;border-radius:16px;padding:20px;margin:15px}
+.grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:15px;padding:15px}
+@media(max-width:700px){.grid{grid-template-columns:1fr 1fr}}
+.game-card{background:#1a1a25;border:1px solid #333;border-radius:16px;padding:20px;text-align:center;cursor:pointer}
+.game-card:hover{border-color:#facc15}
+.game-card .emoji{font-size:40px}
+.game-card h3{margin:10px 0 5px}
+.game-card p{color:#aaa;font-size:13px}
+input,select{width:100%;padding:12px;background:#0a0a0f;border:1px solid #333;color:#fff;border-radius:10px;margin:8px 0}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:200;align-items:center;justify-content:center;padding:15px}
+.modal.open{display:flex}
+.modal-box{background:#15151f;border:1px solid #333;border-radius:18px;padding:22px;width:100%;max-width:420px;max-height:90vh;overflow:auto}
+.close{float:right;cursor:pointer;font-size:22px}
+.big{font-size:48px;text-align:center;margin:15px 0}
+.result{text-align:center;padding:12px;border-radius:10px;margin:10px 0;font-weight:800;display:none}
+.win{background:#14532d;color:#4ade80}
+.lose{background:#450a0a;color:#f87171}
+.flex{display:flex;gap:10px}
+.flex button{flex:1}
+.mines{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:12px 0}
+.mine{aspect-ratio:1;background:#222;border-radius:10px;border:1px solid #333;cursor:pointer;font-size:22px;display:flex;align-items:center;justify-content:center}
+.hidden{display:none}
+.warn{background:#3a2a00;color:#facc15;padding:12px;border-radius:10px;font-size:13px;margin:10px 0;line-height:1.5}
+.ok{background:#052e16;color:#4ade80;padding:12px;border-radius:10px;font-size:13px;margin:10px 0;line-height:1.5}
+</style>
+</head>
+<body>
+
+<header>
+<div class="logo">TURBO<span>26</span></div>
+<nav>
+<button onclick="showTab('stake',this)" class="active">Staking</button>
+<button onclick="showTab('games',this)">Games 🎮</button>
+<button onclick="showTab('wallet',this)">Wallet</button>
+</nav>
+<div class="wallet">Balance<br><b><span id="bal">0</span> TURBO26</b><br><small id="wAddr">Not Connected</small><br><button onclick="connectRealWallet()" style="background:#facc15;border:none;padding:5px 10px;border-radius:6px;font-weight:700;cursor:pointer;margin-top:5px">Connect MetaMask</button></div>
+</header>
+
+<div id="tab-stake">
+<div class="card"><h2>💰 Stake Turbo26 - Earn Rewards</h2><p style="color:#aaa;margin:8px 0">Stake karo, Daily Reward pao. APR: 365% | Min: 1 Turbo26 | Chain: BNB</p>
+<div class="ok">✅ Token Connected: 0x5a11...59d6d<br>MetaMask Connect karte hi Asli Balance aayega!</div>
+<label>Chain</label><select id="chain"><option>BNB Chain</option><option>Polygon</option><option>Base</option></select>
+<label>Stake Amount (Min 1)</label><input id="stakeAmt" type="number" value="100" min="1">
+<button class="btn" onclick="doStake()">STAKE NOW</button>
+<div id="stakeMsg" class="result"></div>
+<div style="display:flex;gap:15px;margin-top:15px;text-align:center"><div style="flex:1;background:#0a0a0f;padding:12px;border-radius:10px">Total Staked<br><b id="totalStaked">0</b></div><div style="flex:1;background:#0a0a0f;padding:12px;border-radius:10px">My Reward<br><b id="myReward">0</b></div><div style="flex:1;background:#0a0a0f;padding:12px;border-radius:10px">Wallet<br><b id="walletBal2">0</b></div></div>
+<button class="btn2" style="width:100%;margin-top:12px" onclick="claim()">CLAIM REWARD</button>
+</div>
+</div>
+
+<div id="tab-games" class="hidden">
+<div style="padding:15px 15px 0"><h2>🎮 All Games - Min Bet 1 Turbo26</h2><p style="color:#aaa">Koi bhi Game choose karo, Bet lagao, Jeeto!</p>
+<label style="display:block;margin-top:12px">Bet Amount (Min 1 Turbo26)</label><input id="betAmt" type="number" value="10" min="1" style="max-width:300px">
+</div>
+<div class="grid">
+<div class="game-card" onclick="openGame('coin')"><div class="emoji">🪙</div><h3>Coin Flip</h3><p>Head / Tail - Win 2x</p><b style="color:#facc15">PLAY →</b></div>
+<div class="game-card" onclick="openGame('dice')"><div class="emoji">🎲</div><h3>Dice</h3><p>Number Guess - Win 6x</p><b style="color:#facc15">PLAY →</b></div>
+<div class="game-card" onclick="openGame('spin')"><div class="emoji">🎡</div><h3>Spin & Win</h3><p>Wheel - Win Upto 10x</p><b style="color:#facc15">PLAY →</b></div>
+<div class="game-card" onclick="openGame('mines')"><div class="emoji">💣</div><h3>Mines</h3><p>Bomb se bacho - Win Upto 5x</p><b style="color:#facc15">PLAY →</b></div>
+<div class="game-card" onclick="openGame('crash')"><div class="emoji">🚀</div><h3>Crash</h3><p>Jitni der rukoge utna zyada</p><b style="color:#facc15">PLAY →</b></div>
+<div class="game-card" onclick="openGame('number')"><div class="emoji">🔢</div><h3>Number Guess</h3><p>1-10 Guess - Win 10x</p><b style="color:#facc15">PLAY →</b></div>
+<div class="game-card" onclick="openGame('poker')"><div class="emoji">🃏</div><h3>Poker / Teen Patti</h3><p>Card Game - Win 3x</p><b style="color:#facc15">PLAY →</b></div>
+<div class="game-card" onclick="openGame('lucky')"><div class="emoji">🎁</div><h3>Lucky Box</h3><p>Box Kholo - Win Upto 5x</p><b style="color:#facc15">PLAY →</b></div>
+</div>
+</div>
+
+<div id="tab-wallet" class="hidden">
+<div class="card"><h2>👛 Real Wallet - MetaMask</h2>
+<div class="ok">✅ Turbo26 Token: <b>0x5a11075C985404288497c59778179b8fE2559d6d</b><br>Network: BNB Smart Chain (Chain ID: 56)</div>
+<button class="btn" onclick="connectRealWallet()">CONNECT METAMASK WALLET</button>
+<p style="margin-top:12px">Address: <b id="wAddr2" style="word-break:break-all">Not Connected</b></p>
+<p>Balance: <b><span class="bal2">0</span> TURBO26</b></p>
+<p>Total Win: <b id="totalWin">0</b> | Total Loss: <b id="totalLoss">0</b></p>
+<button class="btn2" style="width:100%;margin-top:10px" onclick="loadRealBalance()">🔄 REFRESH BALANCE</button>
+<a href="https://bscscan.com/token/0x5a11075C985404288497c59778179b8fE2559d6d" target="_blank" style="color:#facc15;display:block;text-align:center;margin-top:12px">View Token on BscScan →</a>
+</div>
+</div>
+
+<div id="gameModal" class="modal"><div class="modal-box">
+<span class="close" onclick="closeGame()">✕</span>
+<h2 id="gTitle">Game</h2><p id="gDesc" style="color:#aaa"></p>
+<div class="big" id="gDisplay">❓</div>
+<div id="gControls"></div>
+<div id="gResult" class="result"></div>
+<button class="btn" onclick="closeGame()">BACK TO GAMES</button>
+</div></div>
+
+<script>
+let balance=0, staked=0, totalWin=0, totalLoss=0, currentGame='', crashVal=1, crashTimer=null, minesBomb=-1, minesPicked=0, minesActive=false;
+let provider, signer, userAddress;
+let TURBO_TOKEN_ADDRESS = "0x5a11075C985404288497c59778179b8fE2559d6d";
+let TURBO_ABI = ["function balanceOf(address) view returns (uint256)", "function decimals() view returns (uint8)", "function symbol() view returns (string)"];
+
+function updateBal(){document.getElementById('bal').innerText=balance;document.querySelectorAll('.bal2').forEach(e=>e.innerText=balance);document.getElementById('walletBal2').innerText=balance;document.getElementById('totalWin').innerText=totalWin;document.getElementById('totalLoss').innerText=totalLoss;document.getElementById('totalStaked').innerText=staked;}
+function showTab(id,btn){['stake','games','wallet'].forEach(t=>document.getElementById('tab-'+t).classList.add('hidden'));document.getElementById('tab-'+id).classList.remove('hidden');document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
+
+async function connectRealWallet(){
+  if(!window.ethereum){ alert("MetaMask nahi hai! Pehle MetaMask App Install karo!"); window.open("https://metamask.io/download/","_blank"); return; }
+  try{
+    provider = new ethers.providers.Web3Provider(window.ethereum);
+    await provider.send("eth_requestAccounts", []);
+    signer = provider.getSigner();
+    userAddress = await signer.getAddress();
+    document.getElementById('wAddr').innerText = userAddress.slice(0,6)+"..."+userAddress.slice(-4);
+    document.getElementById('wAddr2').innerText = userAddress;
+    try{ await window.ethereum.request({method:'wallet_switchEthereumChain', params:[{chainId:'0x38'}]}); }catch(e){
+      await window.ethereum.request({method:'wallet_addEthereumChain', params:[{chainId:'0x38', chainName:'BNB Smart Chain', nativeCurrency:{name:'BNB',symbol:'BNB',decimals:18}, rpcUrls:['https://bsc-dataseed.binance.org/'], blockExplorerUrls:['https://bscscan.com/']}]});
+    }
+    alert("✅ Wallet Connected!\n"+userAddress);
+    await loadRealBalance();
+  }catch(err){ alert("Fail: "+err.message); }
+}
+async function loadRealBalance(){
+  if(!provider || !userAddress){ alert("Pehle Wallet Connect karo!"); return; }
+  try{
+    let token = new ethers.Contract(TURBO_TOKEN_ADDRESS, TURBO_ABI, provider);
+    let bal = await token.balanceOf(userAddress);
+    let dec = await token.decimals();
+    balance = Math.floor(parseFloat(ethers.utils.formatUnits(bal, dec)));
+    updateBal();
+    alert("✅ Balance Loaded: "+balance+" TURBO26");
+  }catch(e){ alert("Balance Load Fail: "+e.message); }
+}
+function getBet(){let b=parseInt(document.getElementById('betAmt').value)||1;if(b<1){alert('Min Bet 1 Turbo26 hai!');return null;}if(b>balance){alert('Balance kam hai! Pehle MetaMask Connect karo. Balance: '+balance);return null;}return b;}
+function winGame(bet,mult,msg){let win=Math.floor(bet*mult);balance+=win;totalWin+=win;showRes('🎉 JEET GAYE! +'+win+' TURBO26 - '+msg,'win');updateBal();}
+function loseGame(bet,msg){balance-=bet;totalLoss+=bet;showRes('😢 HAAR GAYE! -'+bet+' TURBO26 - '+msg,'lose');updateBal();}
+function showRes(t,type){let e=document.getElementById('gResult');e.style.display='block';e.className='result '+type;e.innerText=t;}
+function doStake(){let amt=parseInt(document.getElementById('stakeAmt').value)||0;if(amt<1)return alert('Min 1');if(amt>balance)return alert('Balance kam hai - Pehle Wallet Connect karo');balance-=amt;staked+=amt;document.getElementById('myReward').innerText=Math.floor(staked*0.1);let m=document.getElementById('stakeMsg');m.style.display='block';m.className='result win';m.innerText='✅ Staked '+amt+' Turbo26 Successfully!';updateBal();}
+function claim(){if(staked==0)return alert('Pehle Stake karo');let r=Math.floor(staked*0.1);balance+=r;alert('Claimed '+r+' Turbo26!');updateBal();}
+function openGame(type){currentGame=type;document.getElementById('gResult').style.display='none';document.getElementById('gameModal').classList.add('open');let t=document.getElementById('gTitle'),d=document.getElementById('gDesc'),disp=document.getElementById('gDisplay'),c=document.getElementById('gControls');
+if(type=='coin'){t.innerText='🪙 Coin Flip - Win 2x';d.innerText='Head ya Tail choose karo. Sahi hua to 2x milega.';disp.innerText='🪙';c.innerHTML='<div class="flex"><button class="btn2" onclick="playCoin(\'Head\')">HEAD</button><button class="btn2" onclick="playCoin(\'Tail\')">TAIL</button></div>';}
+if(type=='dice'){t.innerText='🎲 Dice - Win 6x';d.innerText='1 se 6 tak number choose karo.';disp.innerText='🎲';c.innerHTML='<div class="flex"><button class="btn2" onclick="playDice(1)">1</button><button class="btn2" onclick="playDice(2)">2</button><button class="btn2" onclick="playDice(3)">3</button></div><div class="flex" style="margin-top:8px"><button class="btn2" onclick="playDice(4)">4</button><button class="btn2" onclick="playDice(5)">5</button><button class="btn2" onclick="playDice(6)">6</button></div>';}
+if(type=='spin'){t.innerText='🎡 Spin & Win';d.innerText='Spin karo, Wheel jaha rukega wahi Prize!';disp.innerText='🎡';c.innerHTML='<button class="btn" onclick="playSpin()">SPIN NOW</button>';}
+if(type=='number'){t.innerText='🔢 Number Guess - Win 10x';d.innerText='1 se 10 tak number guess karo.';disp.innerText='🔢';c.innerHTML='<input id="numInp" type="number" min="1" max="10" placeholder="1-10 number dalo"><button class="btn" onclick="playNumber()">GUESS</button>';}
+if(type=='poker'){t.innerText='🃏 Poker / Teen Patti - Win 3x';d.innerText='Tera Card vs Computer ka Card - Bada card jeetega!';disp.innerText='🃏';c.innerHTML='<button class="btn" onclick="playPoker()">DEAL CARDS</button>';}
+if(type=='lucky'){t.innerText='🎁 Lucky Box - Win Upto 5x';d.innerText='3 Box me se 1 kholo!';disp.innerText='🎁';c.innerHTML='<div class="flex"><button class="btn2" onclick="playLucky(1)">BOX 1</button><button class="btn2" onclick="playLucky(2)">BOX 2</button><button class="btn2" onclick="playLucky(3)">BOX 3</button></div>';}
+if(type=='mines'){t.innerText='💣 Mines - Win Upto 5x';d.innerText='Box pe click karo, Bomb aaya to haar, Safe raha to jeet! 3 Safe = Win';disp.innerText='💣';minesBomb=Math.floor(Math.random()*25);minesPicked=0;minesActive=true;let h='<div class="mines" id="minesGrid">';for(let i=0;i<25;i++){h+='<div class="mine" onclick="pickMine('+i+',this)">?</div>';}h+='</div><button class="btn" onclick="cashoutMines()">CASHOUT</button>';c.innerHTML=h;}
+if(type=='crash'){t.innerText='🚀 Crash - Win Upto 10x';d.innerText='Start karo, Crash se pehle Cashout karo!';disp.innerText='🚀 1.00x';c.innerHTML='<button class="btn" onclick="startCrash()">START CRASH</button><button class="btn2" style="width:100%;margin-top:8px;background:#facc15;color:#000" onclick="cashoutCrash()">CASHOUT</button>';}
+}
+function playCoin(choice){let bet=getBet();if(!bet)return;let res=Math.random()<0.5?'Head':'Tail';document.getElementById('gDisplay').innerText=res=='Head'?'🙂':'🙃';if(res==choice)winGame(bet,2,res+' aaya!');else loseGame(bet,res+' aaya!');}
+function playDice(n){let bet=getBet();if(!bet)return;let r=Math.floor(Math.random()*6)+1;document.getElementById('gDisplay').innerText='🎲 '+r;if(r==n)winGame(bet,6,'Dice '+r+' aaya!');else loseGame(bet,'Dice '+r+' aaya!');}
+function playSpin(){let bet=getBet();if(!bet)return;let prizes=[0,2,0,3,0,5,0,10];let p=prizes[Math.floor(Math.random()*prizes.length)];document.getElementById('gDisplay').innerText='🎡 '+p+'x';if(p==0)loseGame(bet,'0x - Kuch nahi mila');else winGame(bet,p,'Spin me '+p+'x mila!');}
+function playNumber(){let bet=getBet();if(!bet)return;let g=parseInt(document.getElementById('numInp').value);if(!g)return alert('Number dalo');let r=Math.floor(Math.random()*10)+1;document.getElementById('gDisplay').innerText='🔢 '+r;if(r==g)winGame(bet,10,'Number '+r+' sahi!');else loseGame(bet,'Number '+r+' tha!');}
+function playPoker(){let bet=getBet();if(!bet)return;let my=Math.floor(Math.random()*13)+1,comp=Math.floor(Math.random()*13)+1;document.getElementById('gDisplay').innerText='You: '+my+' | Comp: '+comp;if(my>comp)winGame(bet,3,'Tera card bada!');else if(my==comp)showRes('Draw! Paise wapas','win');else loseGame(bet,'Computer ka card bada!');}
+function playLucky(n){let bet=getBet();if(!bet)return;let winBox=Math.floor(Math.random()*3)+1;let mult=[2,3,5][Math.floor(Math.random()*3)];document.getElementById('gDisplay').innerText='🎁 Box '+n;if(n==winBox)winGame(bet,mult,'Lucky Box me '+mult+'x mila!');else loseGame(bet,'Is Box me kuch nahi tha!');}
+function pickMine(i,el){if(!minesActive)return;if(i==minesBomb){el.innerText='💣';el.style.background='#ef4444';loseGame(getBet()||10,'Bomb phat gaya!');minesActive=false;return;}el.innerText='✅';el.style.background='#22c55e';minesPicked++;if(minesPicked>=3){winGame(getBet()||10,3,'3 Safe Box mil gaye!');minesActive=false;}}
+function cashoutMines(){if(!minesActive)return;if(minesPicked==0)return alert('Pehle 1 Box to kholo');winGame(getBet()||10,1+minesPicked*0.5,'Cashout kiya!');minesActive=false;}
+function startCrash(){let bet=getBet();if(!bet)return;crashVal=1;clearInterval(crashTimer);let crashAt=1+Math.random()*5;crashTimer=setInterval(()=>{crashVal+=0.1;document.getElementById('gDisplay').innerText='🚀 '+crashVal.toFixed(2)+'x';if(crashVal>=crashAt){clearInterval(crashTimer);document.getElementById('gDisplay').innerText='💥 CRASHED at '+crashVal.toFixed(2)+'x';loseGame(bet,'Crash ho gaya!');}},300);}
+function cashoutCrash(){let bet=getBet();if(!bet)return;if(!crashTimer)return;clearInterval(crashTimer);winGame(bet,crashVal,'Cashout at '+crashVal.toFixed(2)+'x');crashTimer=null;}
+function closeGame(){document.getElementById('gameModal').classList.remove('open');clearInterval(crashTimer);}
+updateBal();
+</script>
+</body>
+</html>
